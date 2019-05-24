@@ -231,28 +231,29 @@ if __name__ == "__main__":
             if ev.type == KEYDOWN:
                 if ev.unicode.isalpha():
                     theApp.name += ev.unicode
-            if keys[K_RIGHT]:
-                theApp.move_right()
+
+        if keys[K_RIGHT]:
+            theApp.move_right()
 
             #initial_position = True
 
-            if keys[K_LEFT]:
-                theApp.move_left()
+        if keys[K_LEFT]:
+            theApp.move_left()
 
             #initial_position = True
 
-            if keys[K_UP]:
-                theApp.move_up()
+        if keys[K_UP]:
+            theApp.move_up()
 
             #initial_position = True
 
-            if keys[K_DOWN]:
-                theApp.move_down()
+        if keys[K_DOWN]:
+            theApp.move_down()
 
             #initial_position = True
 
-            if keys[K_ESCAPE]:
-                running = False
+        if keys[K_ESCAPE]:
+            running = False
 
         theApp.on_render()
 

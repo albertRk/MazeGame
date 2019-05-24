@@ -21,6 +21,7 @@ class Game:
         self.counter = 0
         self.seconds = 0
         self.name = ""
+        self.offset = 200
 
     def check_borders(self, x, y):
         if (x == 0 and (y >= 0 and y < self.maze.maze_height) or
@@ -55,7 +56,8 @@ class Game:
         self.font = pygame.font.SysFont('Arial', 24)
         self.text = self.font.render(self.name + "  " + str(self.seconds), True, (255, 0, 255))
         self.textRec = self.text.get_rect()
-        self.textRec.center = (self.window_width - 100, self.window_height // 2 - 200)
+        self.textRec.center = (self.window_width - 100, self.window_height // 2 - self.offset)
+        self.offset -= 200
 
         self.display_surface.fill((0, 0, 0))
 
@@ -106,6 +108,7 @@ class Game:
            #         pygame.draw.rect(self.display_surface, Color("Green"), Rect(x * 50, y * 50, 50, 50))
             #    else:
             #        self.maze.maze[x, y] = 0
+        stop_clock = True
 
         for x in range(0, self.maze.maze_width):
             for y in range(0, self.maze.maze_height):
@@ -130,6 +133,11 @@ class Game:
             elif self.not_to_draw[k] == False:
                 pygame.draw.rect(self.display_surface, Color("Blue"), Rect(self.enems[k][0], self.enems[k][1], 8, 8))
 
+        for k in range(0, 5):
+            if self.not_to_draw[k] == False:
+                stop_clock = False
+                break
+
         # else:
         # pygame.draw.rect(self.display_surface, Color("Red"), Rect(self.player_x*10, self.player_y*10, 8, 8))
 
@@ -138,10 +146,11 @@ class Game:
         if self.counter == 45:
             self.counter = 0
             self.seconds += 1
-            pygame.draw.rect(self.display_surface, Color("Black"), Rect(self.window_width-190, 10, 180, self.window_height-10))
-            self.text = self.font.render(self.name + "  " + str(self.seconds), True, (255, 0, 255))
-            self.textRec = self.text.get_rect()
-            self.textRec.center = (self.window_width - 100, self.window_height // 2 - 200)
+            if stop_clock==False:
+                pygame.draw.rect(self.display_surface, Color("Black"), Rect(self.window_width-190, 10, 180, self.window_height-10))
+                self.text = self.font.render(self.name + "  " + str(self.seconds), True, (255, 0, 255))
+                self.textRec = self.text.get_rect()
+                self.textRec.center = (self.window_width - 100, self.window_height // 2 - 200)
 
         pygame.display.flip()
 

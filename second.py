@@ -97,14 +97,12 @@ class Game:
 
         pygame.display.flip()
 
-    def check_new_player(self, dic):
-        return self.players.keys() == dic.keys()
 
-    def add_new_player(self, x, y):
+    def addNewPlyer(self, x,y):
         pygame.draw.rect(self.display_surface, Color("Red"), Rect(x, y, 8, 8))
         pygame.display.flip()
 
-    def on_render(self, dic):
+    def on_render(self):
         # self.display_surface.fill((0, 0, 0))
 
         # for x in range(0, self.maze.maze_width):
@@ -114,7 +112,6 @@ class Game:
         #         pygame.draw.rect(self.display_surface, Color("Green"), Rect(x * 50, y * 50, 50, 50))
         #    else:
         #        self.maze.maze[x, y] = 0
-
 
         for x in range(0, self.maze.maze_width):
             for y in range(0, self.maze.maze_height):
@@ -130,9 +127,8 @@ class Game:
                                   [x[1] for x in self.maze.corners][i] * 10, 10, 10))
 
         # if initial_position:
-        for player in dic.keys():
-            print(player)
-            pygame.draw.rect(self.display_surface, Color("Red"), Rect(dic[player][0], dic[player][1], 8, 8))
+
+        pygame.draw.rect(self.display_surface, Color("Red"), Rect(self.player_x, self.player_y, 8, 8))
         for k in range(0, 5):
             if self.not_to_draw[k] == False and self.player_x >= self.enems[k][0] - 2 and self.player_x <= \
                     self.enems[k][0] + 10 \
@@ -274,11 +270,9 @@ if __name__ == "__main__":
         pygame.event.pump()
         # positions = read_pos(n.send(make_pos((theApp.player_x, theApp.player_y))))
         dic = n.senddata(str(theApp.player_x) + "," + str(theApp.player_y))
-        if theApp.check_new_player(dic):
-            for key in dic.keys():
-                if key not in theApp.players:
-                    theApp.add_new_player(dic[key][0], dic[key][1])
-                    theApp.players[key] = dic[key]
+        for key in dic.keys():
+            if key not in theApp.players:
+                theApp.addNewPlyer(dic[key][0], dic[key][1])
         # print(dic)
         # theApp.x = positions[0]
         # theApp.y = positions[1]
@@ -287,6 +281,6 @@ if __name__ == "__main__":
                 if ev.unicode.isalpha():
                     theApp.name += ev.unicode
         theApp.move()
-        theApp.on_render(dic)
+        theApp.on_render()
 
     pygame.quit()

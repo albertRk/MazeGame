@@ -22,17 +22,16 @@ class Maze:
         for x in range(0, self.maze_width):
             for y in range(0, self.maze_height):
                 if self.check_borders(x, y):
-                    self.maze[x,y] = 1
+                    self.maze[x, y] = 1
                 else:
-                    self.maze[x,y] = 0
-
+                    self.maze[x, y] = 0
         shape = ((self.maze_height // 2) * 2, (self.maze_width // 2) * 2)
         complexity = int(complexity * (5 * (shape[0] + shape[1])))
         density = int(density * ((shape[0] // 2) * (shape[1] // 2)))
 
         for i in range(density):
             x, y = rand(0, shape[1] // 2) * 2, rand(0, shape[0] // 2) * 2
-            self.maze[x,y] = 1
+            self.maze[x, y] = 1
             for j in range(complexity):
                 neighbours = []
                 if x > 1: neighbours.append((x - 2, y))
@@ -44,12 +43,20 @@ class Maze:
                     x1 = temp[0]
                     y1 = temp[1]
                     # print(x1, y1)
-                    if self.maze[x,y] == 0:
-                        self.maze[x, y] = 1
-                        self.maze[x1 + (x - x1) // 2 , y1 + (y - y1) // 2] = 1
+                    if self.maze[x1, y1] == 0:
+                        self.maze[x1, y1] = 1
+                        self.maze[x1 + (x - x1) // 2, y1 + (y - y1) // 2] = 1
                         x, y = x1, y1
+
     def convert_to_send(self):
         result = dict()
         for key in self.maze.keys():
             result[str(key[0]) + ',' + str(key[1])] = self.maze[key]
         self.maze = result
+
+def convert_maze(maze):
+    result = dict()
+    for key in maze.keys():
+        cords = key.split(',')
+        result[int(cords[0]), int(cords[1])] = maze[key]
+    return result

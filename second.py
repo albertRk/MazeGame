@@ -4,6 +4,7 @@ from pygame.locals import *
 import pygame
 from numpy.random import randint as rand
 from network import Network
+from maze import Maze, convert_maze
 
 n = Network()
 
@@ -38,7 +39,6 @@ class Game:
             return False
 
     def get_initpos(self):
-        shape = ((self.maze.maze_height // 2) * 2, (self.maze.maze_width // 2) * 2)
         while True:
             # x, y = rand(0, shape[1] // 2) * 2, rand(0, shape[0] // 2) * 2
             x = rand(0, self.window_width - 1 - 200)
@@ -52,7 +52,7 @@ class Game:
             break
         return x, y
 
-    def on_init(self, maze):
+    def on_init(self):
         pygame.init()
         self.display_surface = pygame.display.set_mode((self.window_width, self.window_height), pygame.HWSURFACE)
         pygame.display.set_caption('Maze Game')
@@ -63,35 +63,12 @@ class Game:
         self.textRec.center = (self.window_width - 100, self.window_height // 2 - 200)
 
         self.display_surface.fill((0, 0, 0))
-
-        for x in range(0, self.maze.maze_width):
-            for y in range(0, self.maze.maze_height):
-                if self.check_borders(x, y) == True:
-                    self.maze.maze[x, y] = 1
-                    pygame.draw.rect(self.display_surface, Color("Green"), Rect(x * 10, y * 10, 10, 10))
-                else:
-                    self.maze.maze[x, y] = 0
-        for i in range(0, 3):
-            pygame.draw.rect(self.display_surface, Color("Blue"),
-                             Rect([x[0] for x in self.maze.corners][i] * 10,
-                                  [x[1] for x in self.maze.corners][i] * 10, 10, 10))
-        #
-
-        self.maze.maze = maze
-        # self.maze.generate_maze()
-        # print(maze.keys())
-        for x in range(0, self.maze.maze_width):
-            for y in range(0, self.maze.maze_height):
-                if self.maze.maze[x, y] == 1:
-                    pygame.draw.rect(self.display_surface, Color("Green"), Rect(x * 10, y * 10, 10, 10))
-
         (initx, inity) = self.get_initpos()
         pygame.draw.rect(self.display_surface, Color("Red"), Rect(initx, inity, 8, 8))
         self.player_x = initx
         self.player_y = inity
 
         k = 0
-
         while k != 5:
             (ex, ey) = self.get_initpos()
             if ex != self.player_x and ey != self.player_y:
@@ -221,40 +198,6 @@ class Game:
             self.player_y = self.player_y - 2 * self.speed
 
 
-class Maze:
-
-    def __init__(self):
-        self.maze = {}
-        self.maze_width = 80
-        self.maze_height = 60
-        self.corners = [(1, self.maze_height - 2), (self.maze_width - 2, self.maze_height - 2),
-                        (self.maze_width - 2, 1)]
-
-    def generate_maze(self, complexity=0.75, density=0.75):
-        shape = ((self.maze_height // 2) * 2, (self.maze_width // 2) * 2)
-        complexity = int(complexity * (5 * (shape[0] + shape[1])))
-        density = int(density * ((shape[0] // 2) * (shape[1] // 2)))
-
-        for i in range(density):
-            x, y = rand(0, shape[1] // 2) * 2, rand(0, shape[0] // 2) * 2
-            self.maze[x, y] = 1
-            for j in range(complexity):
-                neighbours = []
-                if x > 1: neighbours.append((x - 2, y))
-                if x < shape[1] - 2: neighbours.append((x + 2, y))
-                if y > 1: neighbours.append((x, y - 2))
-                if y < shape[0] - 2: neighbours.append((x, y + 2))
-                if len(neighbours):
-                    temp = neighbours[rand(0, len(neighbours) - 1)]
-                    x1 = temp[0]
-                    y1 = temp[1]
-                    # print(x1, y1)
-                    if self.maze[x1, y1] == 0:
-                        self.maze[x1, y1] = 1
-                        self.maze[x1 + (x - x1) // 2, y1 + (y - y1) // 2] = 1
-                        x, y = x1, y1
-
-
 def read_pos(str):
     str = str.split(",")
     return int(str[0]), int(str[1])
@@ -264,24 +207,13 @@ def make_pos(tup):
     return str(tup[0]) + "," + str(tup[1])
 
 
-def convert_maze(maze):
-    result = dict()
-    for key in maze.keys():
-        cords = key.split(',')
-        result[int(cords[0]), int(cords[1])] = maze[key]
-    return result
-
-
 if __name__ == "__main__":
     theApp = Game()
-    # playerNumber = n.senddata(str(theApp.player_x) + "," + str(theApp.player_y))
     theApp.players[n.getPlayerNumber()] = (theApp.player_x, theApp.player_y)
     theApp.players[0] = (theApp.player_x, theApp.player_y)
     maze = convert_maze(n.getMaze())
-    print(len(maze))
-    # theApp.maze.maze = maze
-
-    theApp.on_init(maze)
+    theApp.maze.maze = maze
+    theApp.on_init()
     running = True
     theApp.name = ""
     # initial_position = False

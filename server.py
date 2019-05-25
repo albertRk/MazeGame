@@ -60,18 +60,16 @@ def threaded_client(conn, player):
 
     print("Lost connection")
     conn.close()
+if __name__ == "__main__":
+    maze = Maze()
+    maze.generate_maze()
+    maze.convert_to_send()
+    currentPlayer = 0
+    while True:
 
-maze = Maze()
-maze.generate_maze()
-print(maze.maze)
-maze.convert_to_send()
-
-currentPlayer = 0
-while True:
-
-    conn, addr = s.accept()
-    print("Connected to:", addr)
+        conn, addr = s.accept()
+        print("Connected to:", addr)
 
 
-    start_new_thread(threaded_client, (conn, currentPlayer))
-    currentPlayer += 1
+        start_new_thread(threaded_client, (conn, currentPlayer))
+        currentPlayer += 1

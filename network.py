@@ -11,13 +11,19 @@ class Network:
         self.addr = (self.server, self.port)
         self.pos = self.connect()
 
+    def getMaze(self):
+        try:
+            return  json.loads(self.client.recv(56233).decode())
+        except socket.error as e:
+            print(e)
+
     def getPlayerNumber(self):
         return self.pos
 
     def senddata(self, data):
         try:
             self.client.send(str.encode(data))
-            data =  json.loads(self.client.recv(2048).decode())
+            data = json.loads(self.client.recv(2048).decode())
             return data
         except socket.error as e:
             print(e)
@@ -28,10 +34,3 @@ class Network:
             return self.client.recv(2048).decode()
         except:
             pass
-
-    def send(self, data):
-        try:
-            self.client.send(str.encode(data))
-            return pickle.loads(self.client.recv(2048))
-        except socket.error as e:
-            print(e)

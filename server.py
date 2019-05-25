@@ -2,6 +2,7 @@ import json
 import pickle
 import socket
 from _thread import *
+from maze import Maze
 import sys
 
 server = "192.168.8.197"
@@ -26,18 +27,24 @@ def read_pos(str):
 def make_pos(tup):
     return str(tup[0]) + "," + str(tup[1])
 
+def convert_maze(maze):
+    result = dict()
+    for c, key in enumerate(maze.maze.keys()):
+        result[c] = maze.maze[key]
+    return result
 
 players = dict()
 
 
 def threaded_client(conn, player):
     conn.sendall(str.encode(json.dumps(player)))
-    reply = ""
+    conn.sendall(str.encode(json.dumps(maze.maze)))
+
     while True:
         try:
             data = read_pos(conn.recv(2048).decode())
             players[player] = data
-            print(players)
+            # print(players)
 
             if not data:
                 print("Disconnected")
@@ -46,7 +53,6 @@ def threaded_client(conn, player):
             print(reply)
             # print("Received: ", data)
             # print("Sending : ", reply)
-            # conn.sendall(str.encode(make_pos(reply)))
 
             conn.sendall(str.encode(json.dumps(reply)))
         except:
@@ -55,11 +61,17 @@ def threaded_client(conn, player):
     print("Lost connection")
     conn.close()
 
+maze = Maze()
+maze.generate_maze()
+print(maze.maze)
+maze.convert_to_send()
 
 currentPlayer = 0
 while True:
+
     conn, addr = s.accept()
     print("Connected to:", addr)
+
 
     start_new_thread(threaded_client, (conn, currentPlayer))
     currentPlayer += 1

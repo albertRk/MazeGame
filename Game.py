@@ -1,3 +1,5 @@
+import pickle
+
 from pygame.locals import *
 import pygame
 from numpy.random import randint as rand
@@ -50,7 +52,7 @@ class Game:
             break
         return x, y
 
-    def on_init(self):
+    def on_init(self, maze):
         pygame.init()
         self.display_surface = pygame.display.set_mode((self.window_width, self.window_height), pygame.HWSURFACE)
         pygame.display.set_caption('Maze Game')
@@ -73,9 +75,14 @@ class Game:
             pygame.draw.rect(self.display_surface, Color("Blue"),
                              Rect([x[0] for x in self.maze.corners][i] * 10,
                                   [x[1] for x in self.maze.corners][i] * 10, 10, 10))
+        #
 
-        self.maze.generate_maze()
-
+        self.maze.maze = maze
+        # print(self.maze.maze)
+        # self.maze.generate_maze()
+        # print(maze.keys())
+        print(self.maze.maze)
+        print(len(maze))
         for x in range(0, self.maze.maze_width):
             for y in range(0, self.maze.maze_height):
                 if self.maze.maze[x, y] == 1:
@@ -115,7 +122,6 @@ class Game:
         #    else:
         #        self.maze.maze[x, y] = 0
 
-
         for x in range(0, self.maze.maze_width):
             for y in range(0, self.maze.maze_height):
                 if self.maze.maze[x, y] == 1:
@@ -131,7 +137,6 @@ class Game:
 
         # if initial_position:
         for player in dic.keys():
-            print(player)
             pygame.draw.rect(self.display_surface, Color("Red"), Rect(dic[player][0], dic[player][1], 8, 8))
         for k in range(0, 5):
             if self.not_to_draw[k] == False and self.player_x >= self.enems[k][0] - 2 and self.player_x <= \
@@ -262,26 +267,35 @@ def make_pos(tup):
     return str(tup[0]) + "," + str(tup[1])
 
 
+def convert_maze(maze):
+    result = dict()
+    for key in maze.keys():
+        cords = key.split(',')
+        result[int(cords[0]), int(cords[1])] = maze[key]
+    return result
+
+
 if __name__ == "__main__":
     theApp = Game()
-    theApp.on_init()
+    # playerNumber = n.senddata(str(theApp.player_x) + "," + str(theApp.player_y))
+    theApp.players[n.getPlayerNumber()] = (theApp.player_x, theApp.player_y)
+    theApp.players[0] = (theApp.player_x, theApp.player_y)
+    maze = convert_maze(n.getMaze())
+    print(len(maze))
+    # theApp.maze.maze = maze
+
+    theApp.on_init(maze)
     running = True
     theApp.name = ""
-    theApp.players[n.getPlayerNumber()] = (theApp.player_x, theApp.player_y)
-    playerNumber = n.senddata(str(theApp.player_x) + "," + str(theApp.player_y))
     # initial_position = False
     while running:
         pygame.event.pump()
-        # positions = read_pos(n.send(make_pos((theApp.player_x, theApp.player_y))))
         dic = n.senddata(str(theApp.player_x) + "," + str(theApp.player_y))
         if theApp.check_new_player(dic):
             for key in dic.keys():
                 if key not in theApp.players:
                     theApp.add_new_player(dic[key][0], dic[key][1])
                     theApp.players[key] = dic[key]
-        # print(dic)
-        # theApp.x = positions[0]
-        # theApp.y = positions[1]
         for ev in pygame.event.get():
             if ev.type == KEYDOWN:
                 if ev.unicode.isalpha():

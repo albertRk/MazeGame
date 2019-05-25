@@ -20,7 +20,7 @@ class Network:
     def getPlayerNumber(self):
         return self.pos
 
-    def senddata(self, data):
+    def send(self, data):
         try:
             self.client.send(str.encode(data))
             data = json.loads(self.client.recv(2048).decode())

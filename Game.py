@@ -219,7 +219,7 @@ if __name__ == "__main__":
     # initial_position = False
     while running:
         pygame.event.pump()
-        dic = n.senddata(str(theApp.player_x) + "," + str(theApp.player_y))
+        dic = n.send(str(theApp.player_x) + "," + str(theApp.player_y))
         if theApp.check_new_player(dic):
             for key in dic.keys():
                 if key not in theApp.players:

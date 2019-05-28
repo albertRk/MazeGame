@@ -81,8 +81,8 @@ class Game:
     def check_new_player(self, dic):
         return self.players.keys() == dic.keys()
 
-    def add_new_player(self, x, y):
-        pygame.draw.rect(self.display_surface, Color("Red"), Rect(x, y, 8, 8))
+    def add_new_player(self, x, y, color):
+        pygame.draw.rect(self.display_surface, Color(color), Rect(x, y, 8, 8))
         pygame.display.flip()
 
     def on_render(self, dic):
@@ -111,7 +111,7 @@ class Game:
 
         # if initial_position:
         for player in dic.keys():
-            pygame.draw.rect(self.display_surface, Color("Red"), Rect(dic[player][0], dic[player][1], 8, 8))
+            pygame.draw.rect(self.display_surface, Color(dic[player][2]), Rect(dic[player][0], dic[player][1], 8, 8))
         for k in range(0, 5):
             if self.not_to_draw[k] == False and self.player_x >= self.enems[k][0] - 2 and self.player_x <= \
                     self.enems[k][0] + 10 \
@@ -209,8 +209,15 @@ def make_pos(tup):
 
 if __name__ == "__main__":
     theApp = Game()
-    theApp.players[n.getPlayerNumber()] = (theApp.player_x, theApp.player_y)
-    theApp.players[0] = (theApp.player_x, theApp.player_y)
+
+    try:
+        theApp.color = input("Type your color: ")
+        Color(theApp.color)
+    except ValueError:
+        print("Input correct color")
+        exit(-1)
+    theApp.players[n.getPlayerNumber()] = (theApp.player_x, theApp.player_y, theApp.color)
+    theApp.players[0] = (theApp.player_x, theApp.player_y, theApp.color)
     maze = convert_maze(n.getMaze())
     theApp.maze.maze = maze
     theApp.on_init()
@@ -219,16 +226,17 @@ if __name__ == "__main__":
     # initial_position = False
     while running:
         pygame.event.pump()
-        dic = n.send(str(theApp.player_x) + "," + str(theApp.player_y))
+        dic = n.send(str(theApp.player_x) + "," + str(theApp.player_y) + "," + theApp.color)
         if theApp.check_new_player(dic):
             for key in dic.keys():
                 if key not in theApp.players:
-                    theApp.add_new_player(dic[key][0], dic[key][1])
+                    theApp.add_new_player(dic[key][0], dic[key][1], dic[key][2])
                     theApp.players[key] = dic[key]
         for ev in pygame.event.get():
             if ev.type == KEYDOWN:
                 if ev.unicode.isalpha():
                     theApp.name += ev.unicode
+        print(dic)
         theApp.move()
         theApp.on_render(dic)
 

@@ -5,7 +5,7 @@ from _thread import *
 from maze import Maze
 import sys
 
-server = "192.168.8.197"
+server = "10.129.13.79"
 port = 5555
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -21,7 +21,7 @@ print("Waiting for a connection, Server Started")
 
 def read_pos(str):
     str = str.split(",")
-    return int(str[0]), int(str[1])
+    return int(str[0]), int(str[1]), str[2]
 
 
 def make_pos(tup):
@@ -44,13 +44,13 @@ def threaded_client(conn, player):
         try:
             data = read_pos(conn.recv(2048).decode())
             players[player] = data
-            # print(players)
 
+            # print(players)
+            print(data)
             if not data:
                 print("Disconnected")
                 break
             reply = players
-            print(reply)
             # print("Received: ", data)
             # print("Sending : ", reply)
 

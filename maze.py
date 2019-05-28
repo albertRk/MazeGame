@@ -54,6 +54,7 @@ class Maze:
             result[str(key[0]) + ',' + str(key[1])] = self.maze[key]
         self.maze = result
 
+
 def convert_maze(maze):
     result = dict()
     for key in maze.keys():

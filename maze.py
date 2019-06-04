@@ -30,7 +30,7 @@ class Maze:
         density = int(density * ((shape[0] // 2) * (shape[1] // 2)))
 
         for i in range(density):
-            x, y = rand(0, shape[1] // 2) * 2, rand(0, shape[0] // 2) * 2
+            x, y = rand(0, shape[1] // 2) * 2 + 1, rand(0, shape[0] // 2) * 2 + 1
             self.maze[x, y] = 1
             for j in range(complexity):
                 neighbours = []
@@ -47,17 +47,3 @@ class Maze:
                         self.maze[x1, y1] = 1
                         self.maze[x1 + (x - x1) // 2, y1 + (y - y1) // 2] = 1
                         x, y = x1, y1
-
-    def convert_to_send(self):
-        result = dict()
-        for key in self.maze.keys():
-            result[str(key[0]) + ',' + str(key[1])] = self.maze[key]
-        self.maze = result
-
-
-def convert_maze(maze):
-    result = dict()
-    for key in maze.keys():
-        cords = key.split(',')
-        result[int(cords[0]), int(cords[1])] = maze[key]
-    return result

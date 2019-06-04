@@ -136,6 +136,7 @@ class Game:
             pygame.draw.rect(self.display_surface, Color('blue'), Rect(point[0], point[1], 8, 8))
     def check_points(self):
         for player in self.players:
+            print("s")
 
     # for i in range(0, 16):
     #    for j in range(0, 12):

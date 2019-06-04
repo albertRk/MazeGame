@@ -4,8 +4,8 @@ from numpy.random import randint as rand
 class Maze:
     def __init__(self):
         self.maze = {}
-        self.maze_width = 80
-        self.maze_height = 60
+        self.maze_width = 81
+        self.maze_height = 61
         self.corners = [(1, self.maze_height - 2), (self.maze_width - 2, self.maze_height - 2),
                         (self.maze_width - 2, 1)]
 
@@ -25,12 +25,12 @@ class Maze:
                     self.maze[x, y] = 1
                 else:
                     self.maze[x, y] = 0
-        shape = ((self.maze_height // 2) * 2, (self.maze_width // 2) * 2)
+        shape = ((self.maze_height // 2) * 2 + 1, (self.maze_width // 2) * 2 + 1)
         complexity = int(complexity * (5 * (shape[0] + shape[1])))
         density = int(density * ((shape[0] // 2) * (shape[1] // 2)))
 
         for i in range(density):
-            x, y = rand(0, shape[1] // 2) * 2 + 1, rand(0, shape[0] // 2) * 2 + 1
+            x, y = rand(0, shape[1] // 2) * 2, rand(0, shape[0] // 2) * 2
             self.maze[x, y] = 1
             for j in range(complexity):
                 neighbours = []

@@ -90,11 +90,6 @@ class Game:
                 else:
                     pygame.draw.rect(self.display_surface, Color("Black"), Rect(x * 10, y * 10, 10, 10))
 
-        for i in range(0, 3):
-            pygame.draw.rect(self.display_surface, Color("Blue"),
-                             Rect([x[0] for x in self.maze.corners][i] * 10,
-                                  [x[1] for x in self.maze.corners][i] * 10, 10, 10))
-
         # if initial_position:
         for player in self.players.keys():
             pygame.draw.rect(self.display_surface, Color(self.players[player][2]),
@@ -104,17 +99,9 @@ class Game:
         # pygame.draw.rect(self.display_surface, Color("Red"), Rect(self.player_x*10, self.player_y*10, 8, 8))
 
         self.display_surface.blit(self.text, self.textRec)
-        self.counter += 1
-        if self.counter == 45:
-            self.counter = 0
-            self.seconds += 1
-            pygame.draw.rect(self.display_surface, Color("Black"),
-                             Rect(self.window_width - 190, 10, 180, self.window_height - 10))
-            self.text = self.font.render(self.name + "  " + str(self.seconds), True, (255, 0, 255))
-            self.textRec = self.text.get_rect()
-            self.textRec.center = (self.window_width - 100, self.window_height // 2 - 200)
         if len(self.points) < 10:
             self.generate_point()
+        self.check_points()
         self.draw_points()
         pygame.display.flip()
 
@@ -128,15 +115,28 @@ class Game:
                 or maze[(self.players[player][0] + 6) // 10, self.players[player][1] // 10] == 1 \
                 or maze[self.players[player][0] // 10, (self.players[player][1] + 6) // 10] == 1:
             return True
+        for person in self.players.keys():
+            if self.players[person] is not self.players[player] and self.players[player][0] in range(self.players[person][0] -8 ,self.players[person][0] +8) and self.players[player][1] in range(self.players[person][1] -8 ,self.players[person][1] +8) :
+                return True
         return False
+
     def generate_point(self):
         self.points.add(self.get_initpos())
+
     def draw_points(self):
         for point in self.points:
             pygame.draw.rect(self.display_surface, Color('blue'), Rect(point[0], point[1], 8, 8))
+
     def check_points(self):
-        for player in self.players:
-            pass
+        list_to_delete = list()
+        for point in self.points:
+            for player in self.players.keys():
+
+                if self.players[player][0] in range(point[0] - 8, point[0] + 8) and self.players[player][1] in range(
+                        point[1] - 8, point[1] + 8):
+                    list_to_delete.append(point)
+        for point in list_to_delete:
+            self.points.remove(point)
 
     # for i in range(0, 16):
     #    for j in range(0, 12):

@@ -135,6 +135,7 @@ class Game:
                 if self.players[player][0] in range(point[0] - 8, point[0] + 8) and self.players[player][1] in range(
                         point[1] - 8, point[1] + 8):
                     list_to_delete.append(point)
+                    self.players[3] += 1
         for point in list_to_delete:
             self.points.remove(point)
 

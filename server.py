@@ -48,11 +48,11 @@ def move(data, player):
 
 def threaded_client(conn):
 
-    # conn.send(str.encode("t"))
     nick = conn.recv(2048).decode()
-    print(nick)
+    i = 1
+    while nick in theGame.players.keys():
+        nick += str(i)
     color = conn.recv(2048).decode()
-    # print(color)
     theGame.players[nick] = [theGame.get_initpos()[0], theGame.get_initpos()[1], color, 0]
     while True:
         try:
@@ -63,8 +63,6 @@ def threaded_client(conn):
                 print("Disconnected")
 
                 break
-
-            # conn.send(str.encode('2'))
         except:
             break
     del theGame.players[nick]

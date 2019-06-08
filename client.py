@@ -15,7 +15,7 @@ def on_press(key):
     if key == keyboard.Key.left:
         n.send('-1,0')
 
-def move(network):
+def move():
     with keyboard.Listener(
         on_press= on_press) as listener:
         listener.join()
@@ -28,13 +28,13 @@ if __name__ == "__main__":
     n.send(nickname)
     while True:
         try:
-            color = input("choose color")
+            color = input("choose color: ")
             Color(color)
             break
         except ValueError:
             pass
     n.send(color)
     while running:
-        move(n)
+        move()
 
 

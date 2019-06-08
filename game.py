@@ -85,8 +85,6 @@ class Game:
             pygame.draw.rect(self.display_surface, Color(self.players[player][2]),
                              Rect(self.players[player][0], self.players[player][1], 8, 8))
 
-        # else:
-        # pygame.draw.rect(self.display_surface, Color("Red"), Rect(self.player_x*10, self.player_y*10, 8, 8))
 
         self.display_surface.blit(self.text, self.textRec)
         if len(self.points) < 10:
@@ -129,8 +127,3 @@ class Game:
                     self.players[player][3] += 1
         for point in list_to_delete:
             self.points.remove(point)
-
-    # for i in range(0, 16):
-    #    for j in range(0, 12):
-    #       print(self.maze.maze[i, j], end=" ")
-    #    print("\n")

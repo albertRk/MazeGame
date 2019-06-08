@@ -1,5 +1,3 @@
-import json
-import pickle
 import socket
 
 
@@ -15,13 +13,11 @@ class Network:
         try:
             print(data)
             self.client.send(str.encode(data))
-            # data = self.client.recv(2048).decode()
             # return data
         except socket.error as e:
             print(e)
     def connect(self):
         try:
             self.client.connect(self.addr)
-            # return self.client.recv(2048).decode()
         except:
             pass

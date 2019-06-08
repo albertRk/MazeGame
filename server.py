@@ -46,22 +46,28 @@ def move(data, player):
             theGame.players[player][0] = theGame.players[player][0] + 2 * theGame.speed
 
 
-def threaded_client(conn, player):
-    theGame.players[player] = [theGame.get_initpos()[0], theGame.get_initpos()[1], 'red', 0]
-    conn.send(str.encode("t"))
+def threaded_client(conn):
+
+    # conn.send(str.encode("t"))
+    nick = conn.recv(2048).decode()
+    print(nick)
+    color = conn.recv(2048).decode()
+    # print(color)
+    theGame.players[nick] = [theGame.get_initpos()[0], theGame.get_initpos()[1], color, 0]
     while True:
         try:
             data = read_pos(conn.recv(2048).decode())
-            move(data, player)
+
+            move(data, nick)
             if not data:
                 print("Disconnected")
 
                 break
 
-            conn.send(str.encode('2'))
+            # conn.send(str.encode('2'))
         except:
             break
-    del theGame.players[player]
+    del theGame.players[nick]
     print("Lost connection")
     conn.close()
 
@@ -77,7 +83,6 @@ def runGame():
 
 
 if __name__ == "__main__":
-    currentPlayer = 0
     theGame = Game()
     thread = threading.Thread(target=runGame)
     thread.start()
@@ -85,5 +90,4 @@ if __name__ == "__main__":
         conn, addr = s.accept()
         print("Connected to:", addr)
 
-        start_new_thread(threaded_client, (conn, currentPlayer))
-        currentPlayer += 1
+        start_new_thread(threaded_client, (conn,))

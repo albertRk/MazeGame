@@ -72,16 +72,6 @@ class Game:
         pygame.display.flip()
 
     def on_render(self):
-        # self.display_surface.fill((0, 0, 0))
-
-        # for x in range(0, self.maze.maze_width):
-        #    for y in range(0, self.maze.maze_height):
-        #       if self.check_borders(x, y) == True:
-        #          self.maze.maze[x, y] = 1
-        #         pygame.draw.rect(self.display_surface, Color("Green"), Rect(x * 50, y * 50, 50, 50))
-        #    else:
-        #        self.maze.maze[x, y] = 0
-        # print(players.keys())
         for x in range(0, self.maze.maze_width):
             for y in range(0, self.maze.maze_height):
                 if self.maze.maze[x, y] == 1:
@@ -135,7 +125,8 @@ class Game:
                 if self.players[player][0] in range(point[0] - 8, point[0] + 8) and self.players[player][1] in range(
                         point[1] - 8, point[1] + 8):
                     list_to_delete.append(point)
-                    self.players[3] += 1
+                    print(self.players[player])
+                    self.players[player][3] += 1
         for point in list_to_delete:
             self.points.remove(point)
 

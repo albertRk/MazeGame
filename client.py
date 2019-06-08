@@ -1,9 +1,9 @@
 import socket
 import time
 
+from pygame.locals import Color
 from pynput import keyboard
 from network import Network
-
 
 def on_press(key):
     if key == keyboard.Key.down:
@@ -24,8 +24,16 @@ if __name__ == "__main__":
 
     running = True
     n = Network()
-    # initial_position = False
-
+    nickname = input("Tell me your name: ")
+    n.send(nickname)
+    while True:
+        try:
+            color = input("choose color")
+            Color(color)
+            break
+        except ValueError:
+            pass
+    n.send(color)
     while running:
         move(n)
 

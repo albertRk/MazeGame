@@ -23,6 +23,7 @@ class Game:
         self.name = ""
         self.players = dict()
         self.points = set()
+        self.offset = 50
 
     def check_borders(self, x, y):
         if (x == 0 and (y >= 0 and y < self.maze.maze_height) or
@@ -51,9 +52,9 @@ class Game:
         pygame.display.set_caption('Maze Game')
 
         self.font = pygame.font.SysFont('Arial', 24)
-        self.text = self.font.render(self.name + "  " + str(self.seconds), True, (255, 0, 255))
-        self.textRec = self.text.get_rect()
-        self.textRec.center = (self.window_width - 100, self.window_height // 2 - 200)
+        #self.text = self.font.render(self.name + "aaa  " + str(self.seconds), True, (255, 0, 255))
+        #self.textRec = self.text.get_rect()
+        #self.textRec.center = (self.window_width - 100, self.window_height // 2 - 200)
 
         self.display_surface.fill((0, 0, 0))
 
@@ -80,7 +81,19 @@ class Game:
             pygame.draw.rect(self.display_surface, Color(self.players[player][2]),
                              Rect(self.players[player][0], self.players[player][1], 8, 8))
 
-        self.display_surface.blit(self.text, self.textRec)
+        self.font = pygame.font.SysFont('Arial', 24)
+        pygame.draw.rect(self.display_surface, Color("Black"),
+                         Rect(self.window_width - 190, 10, 180, self.window_height - 10))
+
+        for player in self.players.keys():
+            self.text = self.font.render(player + " scored " + str(self.players[player][3]) + "pts.", True, (255, 0, 255))
+            self.textRec = self.text.get_rect()
+            self.textRec.center = (self.window_width - 100, self.offset)
+
+            self.display_surface.blit(self.text, self.textRec)
+            self.offset += 50
+
+        self.offset = 50
         if len(self.points) < 10:
             self.generate_point()
         self.check_points()

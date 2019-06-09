@@ -27,8 +27,8 @@ if __name__ == "__main__":
 
     running = True
     n = Network()
-    nickname = "john"
-    # nickname = input("Tell me your name: ")
+    #nickname = "john"
+    nickname = input("Tell me your name: ")
     n.send(nickname)
     while True:
         try:

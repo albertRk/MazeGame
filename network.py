@@ -13,7 +13,6 @@ class Network:
         try:
             print(data)
             self.client.send(str.encode(data))
-            # return data
         except socket.error as e:
             print(e)
     def connect(self):

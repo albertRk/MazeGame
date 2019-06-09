@@ -1,6 +1,3 @@
-import socket
-import threading
-from _thread import *
 
 from pygame.locals import *
 import pygame
@@ -38,16 +35,14 @@ class Game:
 
     def get_initpos(self):
         while True:
-            # x, y = rand(0, shape[1] // 2) * 2, rand(0, shape[0] // 2) * 2
             x = rand(0, self.window_width - 1 - 200)
             y = rand(0, self.window_height - 1)
-            # if self.maze.maze[x, y] == 1:
-            if self.maze.maze[x // 10, y // 10] == 1 \
-                    or self.maze.maze[(x + 6) // 10, (y + 6) // 10] == 1 \
-                    or self.maze.maze[(x + 6) // 10, y // 10] == 1 \
-                    or self.maze.maze[x // 10, (y + 6) // 10] == 1:
-                continue
-            break
+            # if self.maze.maze[x // 10, y // 10] == 1 \
+            #         or self.maze.maze[(x + 6) // 10, (y + 6) // 10] == 1 \
+            #         or self.maze.maze[(x + 6) // 10, y // 10] == 1 \
+            #         or self.maze.maze[x // 10, (y + 6) // 10] == 1:
+            if not self.blocked(self.maze.maze, x, y):
+                break
         return x, y
 
     def on_init(self):
@@ -85,7 +80,6 @@ class Game:
             pygame.draw.rect(self.display_surface, Color(self.players[player][2]),
                              Rect(self.players[player][0], self.players[player][1], 8, 8))
 
-
         self.display_surface.blit(self.text, self.textRec)
         if len(self.points) < 10:
             self.generate_point()
@@ -93,18 +87,21 @@ class Game:
         self.draw_points()
         pygame.display.flip()
 
-    def blocked(self, maze, player):
-        if self.players[player][0] < 0 or self.players[player][0] >= self.window_width - 200 or \
-                self.players[player][1] < 0 or \
-                self.players[player][1] >= self.window_height:
+    def blocked(self, maze, x, y):
+        if x < 0 or x >= self.window_width - 200 or \
+                y < 0 or \
+                y >= self.window_height:
             return True
-        if maze[self.players[player][0] // 10, self.players[player][1] // 10] == 1 \
-                or maze[(self.players[player][0] + 6) // 10, (self.players[player][1] + 6) // 10] == 1 \
-                or maze[(self.players[player][0] + 6) // 10, self.players[player][1] // 10] == 1 \
-                or maze[self.players[player][0] // 10, (self.players[player][1] + 6) // 10] == 1:
+        if maze[x // 10, y // 10] == 1 \
+                or maze[(x + 6) // 10, (y + 6) // 10] == 1 \
+                or maze[(x + 6) // 10, y // 10] == 1 \
+                or maze[x // 10, (y + 6) // 10] == 1:
             return True
         for person in self.players.keys():
-            if self.players[person] is not self.players[player] and self.players[player][0] in range(self.players[person][0] -8 ,self.players[person][0] +8) and self.players[player][1] in range(self.players[person][1] -8 ,self.players[person][1] +8) :
+            if self.players[person][0] != x and self.players[person][1] != y and x in range(self.players[person][0] - 8,
+                                                                                            self.players[person][
+                                                                                                0] + 8) and y in range(
+                    self.players[person][1] - 8, self.players[person][1] + 8):
                 return True
         return False
 

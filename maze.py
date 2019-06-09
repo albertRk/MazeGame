@@ -42,7 +42,6 @@ class Maze:
                     temp = neighbours[rand(0, len(neighbours) - 1)]
                     x1 = temp[0]
                     y1 = temp[1]
-                    # print(x1, y1)
                     if self.maze[x1, y1] == 0:
                         self.maze[x1, y1] = 1
                         self.maze[x1 + (x - x1) // 2, y1 + (y - y1) // 2] = 1

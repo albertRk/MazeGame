@@ -1,5 +1,3 @@
-import socket
-import time
 
 from pygame.locals import Color
 from pynput import keyboard
@@ -31,17 +29,14 @@ if __name__ == "__main__":
 
     running = True
     n = Network()
-    #nickname = "john"
     nickname = input("Tell me your name: ")
     n.send(nickname)
     while True:
         try:
-            # color = "red"
             color = input("choose color: ")
             Color(color)
             break
         except ValueError:
-    #
             pass
 
     n.send(color)

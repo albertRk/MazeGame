@@ -51,9 +51,6 @@ class Game:
         pygame.display.set_caption('Maze Game')
 
         self.font = pygame.font.SysFont('Arial', 24)
-        #self.text = self.font.render(self.name + "aaa  " + str(self.seconds), True, (255, 0, 255))
-        #self.textRec = self.text.get_rect()
-        #self.textRec.center = (self.window_width - 100, self.window_height // 2 - 200)
 
         self.display_surface.fill((0, 0, 0))
 

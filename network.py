@@ -15,6 +15,7 @@ class Network:
             self.client.send(str.encode(data))
         except socket.error as e:
             print(e)
+
     def connect(self):
         try:
             self.client.connect(self.addr)

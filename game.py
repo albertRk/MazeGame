@@ -1,4 +1,3 @@
-
 from pygame.locals import *
 import pygame
 from numpy.random import randint as rand
@@ -111,10 +110,8 @@ class Game:
                 or maze[x // 10, (y + 6) // 10] == 1:
             return True
         for person in self.players.keys():
-            if self.players[person][0] != x and self.players[person][1] != y and x in range(self.players[person][0] - 8,
-                                                                                            self.players[person][
-                                                                                                0] + 8) and y in range(
-                    self.players[person][1] - 8, self.players[person][1] + 8):
+            if self.players[person][0] != x and self.players[person][1] != y and abs(
+                    x - self.players[person][0]) < 8 and abs(y - self.players[person][1]) < 8:
                 return True
         return False
 

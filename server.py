@@ -45,7 +45,7 @@ def move(data, player):
 def threaded_client(conn):
     nick = conn.recv(2048).decode()
     i = 1
-    while nick in theGame.players.keys() or nick == '0':
+    while nick in theGame.players.keys():
         nick += str(i)
     color = conn.recv(2048).decode()
     x, y = theGame.get_initpos()

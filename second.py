@@ -15,6 +15,10 @@ def on_press(key):
         n.send('1,0')
     if key == keyboard.Key.left:
         n.send('-1,0')
+    if key == keyboard.Key.esc:
+        n.send('quit')
+        global running
+        running = False
 
 
 def move():
@@ -27,8 +31,8 @@ if __name__ == "__main__":
 
     running = True
     n = Network()
-    nickname = "john"
-    # nickname = input("Tell me your name: ")
+    #nickname = "john"
+    nickname = input("Tell me your name: ")
     n.send(nickname)
     while True:
         try:

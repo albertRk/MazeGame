@@ -15,6 +15,10 @@ def on_press(key):
         n.send('1,0')
     if key == keyboard.Key.left:
         n.send('-1,0')
+    if key == keyboard.Key.esc:
+        n.send('quit')
+        global running
+        running = False
 
 
 def move():

@@ -55,7 +55,7 @@ def threaded_client(conn):
             data = read_pos(conn.recv(2048).decode())
 
             move(data, nick)
-            if not data:
+            if not data or data == "quit":
                 print("Disconnected")
 
                 break

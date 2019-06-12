@@ -1,4 +1,3 @@
-
 from pygame.locals import Color
 from pynput import keyboard
 from network import Network
@@ -14,7 +13,7 @@ def on_press(key):
     if key == keyboard.Key.left:
         n.send('-1,0')
     if key == keyboard.Key.esc:
-        n.send('quit')
+        n.send('0,0')
         global running
         running = False
 
@@ -30,7 +29,7 @@ if __name__ == "__main__":
     running = True
     n = Network()
     nickname = input("Tell me your name: ")
-    n.send(nickname)
+    n.sendWithoutRespond(nickname)
     while True:
         try:
             color = input("choose color: ")
@@ -39,6 +38,6 @@ if __name__ == "__main__":
         except ValueError:
             pass
 
-    n.send(color)
+    n.sendWithoutRespond(color)
     while running:
         move()

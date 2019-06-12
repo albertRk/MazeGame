@@ -82,7 +82,8 @@ class Game:
                          Rect(self.window_width - 190, 10, 180, self.window_height - 10))
 
         for player in self.players.keys():
-            self.text = self.font.render(player + " scored " + str(self.players[player][3]) + "pts.", True, (255, 0, 255))
+            self.text = self.font.render(player + " scored " + str(self.players[player][3]) + "pts.", True,
+                                         (255, 0, 255))
             self.textRec = self.text.get_rect()
             self.textRec.center = (self.window_width - 100, self.offset)
 
@@ -127,7 +128,11 @@ class Game:
                 if self.players[player][0] in range(point[0] - 8, point[0] + 8) and self.players[player][1] in range(
                         point[1] - 8, point[1] + 8):
                     list_to_delete.append(point)
-                    print(self.players[player])
                     self.players[player][3] += 1
         for point in list_to_delete:
             self.points.remove(point)
+
+    def getStartPoints(self):
+        if len(self.players) == 0:
+            return 0
+        return int( sum([self.players[player][3] for player in self.players.keys()]) / len(self.players))

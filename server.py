@@ -19,6 +19,7 @@ print("Waiting for a connection, Server Started")
 
 
 def read_pos(str):
+    print(str)
     str = str.split(",")
     return int(str[0]), int(str[1])
 
@@ -49,15 +50,16 @@ def threaded_client(conn):
         nick += str(i)
     color = conn.recv(2048).decode()
     x, y = theGame.get_initpos()
-    theGame.players[nick] = [x, y, color, 0]
+    theGame.players[nick] = [x, y, color, theGame.getStartPoints()]
     while True:
         try:
             data = read_pos(conn.recv(2048).decode())
-
+            if data[0] == 0 and data[1] == 0:
+                break
             move(data, nick)
-            if not data or data == "quit":
+            conn.send(str.encode("2"))
+            if not data:
                 print("Disconnected")
-
                 break
         except:
             break
@@ -83,5 +85,4 @@ if __name__ == "__main__":
     while True:
         conn, addr = s.accept()
         print("Connected to:", addr)
-
         start_new_thread(threaded_client, (conn,))

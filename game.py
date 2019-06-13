@@ -114,7 +114,7 @@ class Game:
 
     def draw_points(self):
         for point in self.points:
-            pygame.draw.rect(self.display_surface, Color('blue'), Rect(point[0], point[1], 8, 8))
+            pygame.draw.rect(self.display_surface, Color('0xCC00CC00'), Rect(point[0], point[1], 8, 8))
 
     def check_points(self):
         list_to_delete = list()

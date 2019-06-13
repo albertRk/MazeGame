@@ -91,7 +91,7 @@ class Game:
             self.offset += 50
 
         self.offset = 50
-        if len(self.points) < 10:
+        if len(self.points) < 30:
             self.generate_point()
         self.check_points()
         self.draw_points()

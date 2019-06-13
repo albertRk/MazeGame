@@ -135,4 +135,4 @@ class Game:
     def getStartPoints(self):
         if len(self.players) == 0:
             return 0
-        return int( sum([self.players[player][3] for player in self.players.keys()]) / len(self.players))
+        return int(sum([self.players[player][3] for player in self.players.keys()]) / len(self.players))

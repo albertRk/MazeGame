@@ -16,12 +16,14 @@ class Network:
         except socket.error as e:
             print(e)
         return self.client.recv(2048).decode()
+
     def sendWithoutRespond(self, data):
         try:
             print(data)
             self.client.send(str.encode(data))
         except socket.error as e:
             print(e)
+
     def connect(self):
         try:
             self.client.connect(self.addr)

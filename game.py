@@ -37,10 +37,6 @@ class Game:
         while True:
             x = rand(0, self.window_width - 1 - 200)
             y = rand(0, self.window_height - 1)
-            # if self.maze.maze[x // 10, y // 10] == 1 \
-            #         or self.maze.maze[(x + 6) // 10, (y + 6) // 10] == 1 \
-            #         or self.maze.maze[(x + 6) // 10, y // 10] == 1 \
-            #         or self.maze.maze[x // 10, (y + 6) // 10] == 1:
             if not self.blocked(self.maze.maze, x, y):
                 break
         return x, y

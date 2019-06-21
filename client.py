@@ -1,8 +1,8 @@
-from pygame.locals import Color
+
 from pynput import keyboard
 from network import Network
 
-
+# funckja wysyła ruch do servera
 def on_press(key):
     if key == keyboard.Key.down:
         n.send('0,1')
@@ -17,7 +17,7 @@ def on_press(key):
         global running
         running = False
 
-
+#  funckja nasłuchująca klawaiture
 def move():
     with keyboard.Listener(
             on_press=on_press) as listener:
@@ -28,16 +28,7 @@ if __name__ == "__main__":
 
     running = True
     n = Network()
-    nickname = input("Tell me your name: ")
-    n.sendWithoutRespond(nickname)
-    while True:
-        try:
-            color = input("choose color: ")
-            Color(color)
-            break
-        except ValueError:
-            pass
-
-    n.sendWithoutRespond(color)
+    nickname = input("Tell me your name: \n ")
+    n.send_without_respond(nickname)
     while running:
         move()

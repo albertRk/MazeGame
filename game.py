@@ -1,3 +1,5 @@
+import random
+
 from pygame.locals import *
 import pygame
 from numpy.random import randint as rand
@@ -23,6 +25,7 @@ class Game:
         self.players = dict()
         self.points = set()
         self.offset = 50
+        self.colors  = ['red', 'blue', 'brown', 'chartreuse', 'coral', 'gold']
 
     def check_borders(self, x, y):
         if (x == 0 and (y >= 0 and y < self.maze.maze_height) or
@@ -32,7 +35,7 @@ class Game:
             return True
         else:
             return False
-
+    # losujemy punkt startowy
     def get_initpos(self):
         while True:
             x = rand(0, self.window_width - 1 - 200)
@@ -40,7 +43,7 @@ class Game:
             if not self.blocked(self.maze.maze, x, y):
                 break
         return x, y
-
+    #ustawiamy podstawowe atrybuty
     def on_init(self):
         pygame.init()
         self.display_surface = pygame.display.set_mode((self.window_width, self.window_height), pygame.HWSURFACE)
@@ -58,15 +61,15 @@ class Game:
     def add_new_player(self, x, y, color):
         pygame.draw.rect(self.display_surface, Color(color), Rect(x, y, 8, 8))
         pygame.display.flip()
-
+    # funkcja odświeżająca gre
     def on_render(self):
         for x in range(0, self.maze.maze_width):
             for y in range(0, self.maze.maze_height):
                 if self.maze.maze[x, y] == 1:
 
-                    pygame.draw.rect(self.display_surface, Color("Green"), Rect(x * 10, y * 10, 10, 10))
+                    pygame.draw.rect(self.display_surface, Color("Grey"), Rect(x * 10, y * 10, 10, 10))
                 else:
-                    pygame.draw.rect(self.display_surface, Color("Black"), Rect(x * 10, y * 10, 10, 10))
+                    pygame.draw.rect(self.display_surface, Color("White"), Rect(x * 10, y * 10, 10, 10))
 
         # if initial_position:
         for player in self.players.keys():
@@ -78,7 +81,7 @@ class Game:
                          Rect(self.window_width - 190, 10, 180, self.window_height - 10))
 
         for player in self.players.keys():
-            self.text = self.font.render(player + " scored " + str(self.players[player][3]) + "pts.", True,
+            self.text = self.font.render(player  + ": " + str(self.players[player][3]), True,
                                          (255, 0, 255))
             self.textRec = self.text.get_rect()
             self.textRec.center = (self.window_width - 100, self.offset)
@@ -92,7 +95,7 @@ class Game:
         self.check_points()
         self.draw_points()
         pygame.display.flip()
-
+    #  sprawdzamy zablokowanie gracza
     def blocked(self, maze, x, y):
         if x < 0 or x >= self.window_width - 200 or \
                 y < 0 or \
@@ -132,3 +135,5 @@ class Game:
         if len(self.players) == 0:
             return 0
         return int(sum([self.players[player][3] for player in self.players.keys()]) / len(self.players))
+    def colorGenerator(self):
+        return random.choice(self.colors)
